@@ -1,0 +1,37 @@
+﻿using MgmtCardLib;
+using System.Windows;
+using System.Windows.Input;
+
+namespace ZarzadzanieKartamiPlatniczymi.Command
+{
+    public class SendNewCardCommand : ICommand
+    {
+        private CardsVM VM;
+
+        public SendNewCardCommand(CardsVM VM)
+        {
+            this.VM = VM;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+            }
+        }
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public void Execute(object parameter)
+        {
+            VM.CurrentCard = new MgmtCardLib.Model.CustomerCard();
+        }
+    }
+}

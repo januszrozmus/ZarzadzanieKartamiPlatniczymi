@@ -1,0 +1,139 @@
+﻿<Window x:Class="ZarzadzanieKartamiPlatniczymi.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZarzadzanieKartamiPlatniczymi"
+        xmlns:vm="clr-namespace:ZarzadzanieKartamiPlatniczymi"
+        mc:Ignorable="d"
+        Title="Cards Management System" Height="450" Width="1200" MinWidth="1100" MinHeight="400">
+    <Window.DataContext>
+        <vm:CardsVM x:Name="CardViewModel"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="680"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <TextBox Name="SearchBox" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding SearchSerialNumberString}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SendSearchCard}" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Content="Search" Command="{Binding SendSearchCard}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,10,0,0"/>
+            <ListView Name="CardsListView" ItemsSource="{Binding Cards}" SelectedItem="{Binding CurrentCard}" Margin="10,40,10,50" HorizontalContentAlignment="Center">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Serial Number" DisplayMemberBinding="{Binding SerialNumber}" Width="140" />
+                        <GridViewColumn Header="Customer ID" DisplayMemberBinding="{Binding CustomerAccountId}" Width="190"/>
+                        <GridViewColumn Header="Unique Identifier" DisplayMemberBinding="{Binding UniqId}" Width="250" />
+                        <GridViewColumn Header="Pin" DisplayMemberBinding="{Binding Pin}" Width="80"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <GridSplitter Grid.Column="1" Width="6" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" ShowsPreview="True" Background="DarkGray" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+        <Grid Grid.Column="2" Margin="6" VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="32"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Customer ID:" Height="24"
+                    VerticalAlignment="Top"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding CurrentCard.CustomerAccountId, UpdateSourceTrigger=PropertyChanged}" Height="24" TabIndex="0" MaxLength="26"
+                    HorizontalContentAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" ToolTip="Required 26 chars">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#FFAAAA"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="26">
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Serial Number:" Height="24"
+                    VerticalAlignment="Top"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding CurrentCard.SerialNumber, UpdateSourceTrigger=PropertyChanged}" Height="24" TabIndex="1" MaxLength="13"
+                    HorizontalContentAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" ToolTip="Required 13 chars">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#FFAAAA"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="13">
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal">
+                    <TextBlock Text="Unique ID:" Height="24" VerticalAlignment="Top"/>
+                    <Button Content="Generate" Command="{Binding SendGenerateUniqId}" Width="50" FontSize="8" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,0,0,10"/>
+                </StackPanel>
+
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding CurrentCard.UniqId, UpdateSourceTrigger=PropertyChanged}" Height="24" IsReadOnly="True" MaxLength="32"
+                    HorizontalContentAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center" ToolTip="Required 32 chars">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#FFAAAA"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="32">
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <TextBlock Grid.Column="0" Grid.Row="3" Text="Pin:" Height="24"
+                    VerticalAlignment="Top"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding CurrentCard.Pin, UpdateSourceTrigger=PropertyChanged}" Height="24" TabIndex="3" MaxLength="4"
+                    HorizontalContentAlignment="Right" VerticalAlignment="Top" VerticalContentAlignment="Center"  ToolTip="Required 4 chars">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Background" Value="#FFAAAA"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource Self}}" Value="4">
+                                    <DataTrigger.Setters>
+                                        <Setter Property="Background" Value="LightGreen"/>
+                                    </DataTrigger.Setters>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                <Grid Height="32" Grid.Row="5" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" TabIndex="4" Content="New Card" Command="{Binding SendNewCard}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4"/>
+                    <Button Grid.Column="1" TabIndex="4" Content="Add/Update Card" Command="{Binding SendAddCard}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4"/>
+                    <Button Grid.Column="2" TabIndex="5" Content="Remove Card" Command="{Binding  SendRemoveCard}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="4" />
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
